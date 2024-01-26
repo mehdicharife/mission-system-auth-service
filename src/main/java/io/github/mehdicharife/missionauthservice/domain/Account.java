@@ -35,6 +35,15 @@ public class Account {
     private List<Role> roles = new ArrayList<Role>();
 
 
+    public Account() {
+
+    }
+    
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public Long getId() {
         return this.id;
     }
