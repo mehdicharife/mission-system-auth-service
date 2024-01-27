@@ -24,7 +24,6 @@ public class JpaAccountService implements AccountService {
         }
 
         Account account = new Account(username, password);
-        
 
         return this.accountRepository.save(account);
     }

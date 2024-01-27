@@ -7,7 +7,7 @@ public class JwtToken {
     private String content;
 
 
-    private JwtToken(String content) {
+    public JwtToken(String content) {
         this.content = content;
     }
 
