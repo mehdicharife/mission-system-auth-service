@@ -23,7 +23,7 @@ import io.github.mehdicharife.missionauthservice.repository.AccountRepository;
 
 
 @Service
-public class JwtTokenServiceImpl {
+public class JwtTokenServiceImpl implements JwtTokenService{
 
     private final SecretKey secretKey;
 
@@ -54,7 +54,6 @@ public class JwtTokenServiceImpl {
         }
 
         return new JwtToken(createJwtStringRepresentation(account));
-
     }
 
     
@@ -72,10 +71,10 @@ public class JwtTokenServiceImpl {
         } catch(JwtException exception) {
             jwtTokenVerification.setIsSuccessfull(false);
         } 
-        
-        return jwtTokenVerification;
 
+        return jwtTokenVerification;
     }
+
 
     private String createJwtStringRepresentation(Account account) {
         Map<String, Object> claims = new HashMap<>();
