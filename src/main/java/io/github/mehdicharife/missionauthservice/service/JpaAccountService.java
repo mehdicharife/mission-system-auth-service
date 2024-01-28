@@ -3,6 +3,7 @@ package io.github.mehdicharife.missionauthservice.service;
 import java.util.Optional;
 
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class JpaAccountService implements AccountService {
 
     public JpaAccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
-        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        //this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        this.passwordEncoder = NoOpPasswordEncoder.getInstance();
     }
     
     public Account createAccount(String username, String password) throws UsernameAlreadyExistsException {

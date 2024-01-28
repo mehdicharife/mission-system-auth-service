@@ -18,9 +18,6 @@ import io.github.mehdicharife.missionauthservice.domain.Account;
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.domain.JwtTokenVerification;
 import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
-import io.github.mehdicharife.missionauthservice.exception.InvalidPasswordException;
-import io.github.mehdicharife.missionauthservice.exception.UsernameDoesntExistException;
-import io.github.mehdicharife.missionauthservice.repository.AccountRepository;
 
 
 @Service

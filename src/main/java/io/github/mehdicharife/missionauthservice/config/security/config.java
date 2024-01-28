@@ -15,7 +15,7 @@ public class config {
         return httpSecurity
             .httpBasic(Customizer.withDefaults())
             .authorizeHttpRequests(
-                authz -> authz.requestMatchers("/jwt-tokens").permitAll()
+                authz -> authz.requestMatchers("/jwt-tokens", "/jwt-verifications").permitAll()
                               .requestMatchers("/accounts", "/roles").hasRole("ADMIN"))
 
             .csrf().disable()
