@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.dto.CreateJwtTokenRequest;
-import io.github.mehdicharife.missionauthservice.exception.InvalidPasswordException;
-import io.github.mehdicharife.missionauthservice.exception.UsernameDoesntExistException;
+import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
 import io.github.mehdicharife.missionauthservice.service.JwtTokenService;
 
 @RestController
@@ -33,12 +32,10 @@ public class JwtTokenController {
 
             return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
             
-        } catch(UsernameDoesntExistException exception) {
+        } catch(BadUsernameOrPasswordException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch(InvalidPasswordException exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        } 
 
     }
     

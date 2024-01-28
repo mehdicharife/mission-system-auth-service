@@ -17,6 +17,7 @@ import javax.crypto.SecretKey;
 import io.github.mehdicharife.missionauthservice.domain.Account;
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.domain.JwtTokenVerification;
+import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
 import io.github.mehdicharife.missionauthservice.exception.InvalidPasswordException;
 import io.github.mehdicharife.missionauthservice.exception.UsernameDoesntExistException;
 import io.github.mehdicharife.missionauthservice.repository.AccountRepository;
@@ -29,29 +30,20 @@ public class JwtTokenServiceImpl implements JwtTokenService{
 
     private final long jwtLifeSpan;
 
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
 
     public JwtTokenServiceImpl(@Value("${jwt.secret}") String secret,
                                @Value("${jwt.lifespan.seconds}") long jwtLifeSpan,
-                               AccountRepository accountRepository) {
+                               AccountService accountService) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtLifeSpan = jwtLifeSpan;
-        this.accountRepository = accountRepository;
+        this.accountService = accountService;
     }
     
 
-    public JwtToken createJwtToken(String username, String password) throws UsernameDoesntExistException, InvalidPasswordException{
-        Optional<Account> optionalAccount = this.accountRepository.findByUsername(username);
-        if(optionalAccount.isEmpty()) {
-            throw new UsernameDoesntExistException(username);
-        } 
-
-        Account account = optionalAccount.get();
-
-        if(!password.equals(account.getPassword())) {
-            throw new InvalidPasswordException();
-        }
+    public JwtToken createJwtToken(String username, String password) throws BadUsernameOrPasswordException{
+        Account account = this.accountService.findAccountByUsernameAndUnEncodedPassword(username, password);
 
         return new JwtToken(createJwtStringRepresentation(account));
     }
