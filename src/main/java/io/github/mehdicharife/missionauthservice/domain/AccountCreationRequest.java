@@ -1,26 +1,24 @@
 package io.github.mehdicharife.missionauthservice.domain;
 
-import java.util.List;
 
-import org.hibernate.annotations.ManyToAny;
-
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
-public class Role {
+@Table(name="account_creation_requests")
+public class AccountCreationRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String name;
-
-    @ManyToMany(mappedBy = "accountDetails.roles")
-    private List<Account> accounts;
+    
+    
+    @Embedded
+    private AccountDetails accountDetails;
 
 
     public Long getId() {
@@ -31,14 +29,15 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+
+    public AccountDetails getAccountDetails() {
+        return this.accountDetails;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccountDetails(AccountDetails accountDetails) {
+        this.accountDetails = accountDetails;
     }
 
-    
-    
+
+
 }
