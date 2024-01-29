@@ -9,8 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "roles")
 public class Role {
 
     @Id
@@ -19,7 +21,7 @@ public class Role {
 
     private String name;
 
-    @ManyToMany(mappedBy = "accountDetails.roles")
+    @ManyToMany(mappedBy = "roles")
     private List<Account> accounts;
 
 
