@@ -29,9 +29,6 @@ public class JpaAccountService implements AccountService {
         
         if(optionalAccont.isPresent()) {
             Account account = optionalAccont.get();
-            System.out.println("Account found");
-            System.out.println("encoded password: "  + this.passwordEncoder.encode(unEncodedPassword));
-            System.out.println("Stored password: " + account.getPassword());
             if(passwordEncoder.matches(unEncodedPassword, account.getPassword())) {
                 return account;
             }

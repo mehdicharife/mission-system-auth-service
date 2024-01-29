@@ -1,5 +1,7 @@
 package io.github.mehdicharife.missionauthservice.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,4 +48,50 @@ public class AccountCreationRequest {
         this.accountDetails = accountDetails;
     }
 
+    public String getUsername() {
+        this.initializeAccountDetailsIfNull();
+        return this.accountDetails.getUsername();
+    }
+
+    public void setUsername(String username) {
+        this.initializeAccountDetailsIfNull();
+        this.accountDetails.setUsername(username);
+    }
+
+    public String getPassword() {
+        this.initializeAccountDetailsIfNull();
+        return this.accountDetails.getPassword();
+    }
+
+    public void setPassword(String password) {
+        this.initializeAccountDetailsIfNull();
+        this.accountDetails.setPassword(password);
+    }
+
+    public Long getUserId() {
+        this.initializeAccountDetailsIfNull();
+        return this.accountDetails.getUserId();
+    }
+
+    public void setUserId(Long userId) {
+        this.initializeAccountDetailsIfNull();
+        this.accountDetails.setUserId(userId);
+    }
+
+
+    public List<Role> getRoles() {
+        this.initializeAccountDetailsIfNull();
+        return this.accountDetails.getRoles();
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.initializeAccountDetailsIfNull();
+        this.accountDetails.setRoles(roles);
+    }
+
+    private void initializeAccountDetailsIfNull() {
+        if(accountDetails == null) {
+            this.accountDetails = new AccountDetails();
+        }   
+    }
 }

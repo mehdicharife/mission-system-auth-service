@@ -3,20 +3,20 @@ package io.github.mehdicharife.missionauthservice.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateAccountRequest {
+public class AccountCreationRequestDto {
     
     private String username;
     
     private String password;
 
-    private List<String> roles = new ArrayList<>();
+    private List<String> rolesNames = new ArrayList<>();
 
 
-    public CreateAccountRequest() {
+    public AccountCreationRequestDto() {
 
     }
 
-    public CreateAccountRequest(String username, String password) {
+    public AccountCreationRequestDto(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -38,12 +38,12 @@ public class CreateAccountRequest {
         this.password = password;
     }
 
-    public List<String> getRoles() {
-        return this.roles;
+    public List<String> getRolesNames() {
+        return this.rolesNames;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRolesNames(List<String> rolesNames) {
+        this.rolesNames = rolesNames;
     }
 
 }
