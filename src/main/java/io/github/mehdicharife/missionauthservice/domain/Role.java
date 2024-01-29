@@ -2,7 +2,6 @@ package io.github.mehdicharife.missionauthservice.domain;
 
 import java.util.List;
 
-import org.hibernate.annotations.ManyToAny;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +21,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private List<Account> accounts;
+    private List<AccountDetails> accountsDetails;
 
 
     public Long getId() {
@@ -41,6 +40,5 @@ public class Role {
         this.name = name;
     }
 
-    
-    
+       
 }

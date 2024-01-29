@@ -1,15 +1,13 @@
 package io.github.mehdicharife.missionauthservice.domain;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,29 +18,18 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
-    private String password;
-
-    private Long userId;
-
-
-    @ManyToMany
-    @JoinTable(name = "accounts_roles",
-        joinColumns = @JoinColumn(name = "account_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<Role> roles = new ArrayList<Role>();
+    @OneToOne
+    private AccountDetails accountDetails;
 
 
     public Account() {
 
     }
     
-    public Account(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public Account(AccountDetails accountDetails) {
+        this.accountDetails = accountDetails;
     }
+
 
     public Long getId() {
         return this.id;
@@ -52,37 +39,46 @@ public class Account {
         this.id = id;
     }
 
+    public AccountDetails getAccountDetails() {
+        return this.accountDetails;
+    }
+
+    public void setAccountDetails(AccountDetails accountDetails) {
+        this.accountDetails = accountDetails;
+    }
+
+
     public String getUsername() {
-        return this.username;
+        return this.accountDetails.getUsername();
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.accountDetails.setUsername(username);
     }
 
     public String getPassword() {
-        return this.password;
+        return this.accountDetails.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.accountDetails.setPassword(password);
     }
 
     public Long getUserId() {
-        return this.userId;
+        return this.accountDetails.getUserId();
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        this.accountDetails.setUserId(userId);
     }
 
 
     public List<Role> getRoles() {
-        return this.roles;
+        return this.accountDetails.getRoles();
     }
 
     public void setRoles(List<Role> roles) {
-        this.roles = roles;
+        this.accountDetails.getRoles();
     }
 
 }
