@@ -3,6 +3,7 @@ package io.github.mehdicharife.missionauthservice.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,11 +25,11 @@ public class AccountCreationRequestController {
 
 
     @PostMapping
-    public ResponseEntity<Object> submitAccountCreationRequest(AccountCreationRequestDto accountCreationRequestDto) {
+    public ResponseEntity<Object> submitAccountCreationRequest(@RequestBody AccountCreationRequestDto accountCreationRequestDto) {
         AccountCreationRequest accountCreationRequest = AccountCreationRequestMapper.fromDto(accountCreationRequestDto);
         try {
-            this.accountCreationRequestService.createAccountCreationRequest(accountCreationRequest);
-            return new ResponseEntity<>(accountCreationRequest, HttpStatus.CREATED);
+            var bmw = this.accountCreationRequestService.createAccountCreationRequest(accountCreationRequest);
+            return new ResponseEntity<>(bmw, HttpStatus.CREATED);
         } catch(UsernameAlreadyExistsException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }

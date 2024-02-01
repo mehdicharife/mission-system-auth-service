@@ -24,7 +24,7 @@ public class AccountCreationRequestMapper {
 
         accountCreationRequest.setUsername(accountCreationRequestDto.getUsername());
 
-        accountCreationRequest.setPassword(accountCreationRequest.getPassword()); 
+        accountCreationRequest.setPassword(accountCreationRequestDto.getPassword()); 
 
         List<Role> roles = new ArrayList<Role>();
         for(String roleName : accountCreationRequestDto.getRolesNames()) {

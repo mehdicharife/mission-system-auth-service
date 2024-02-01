@@ -31,7 +31,9 @@ public class JpaAccountCreationRequestService  implements AccountCreationRequest
             throw new UsernameAlreadyExistsException(username);
         }
 
-        return this.accountCreationRequestRepository.save(accountCreationRequest);
+        AccountCreationRequest request =  this.accountCreationRequestRepository.save(accountCreationRequest);
+
+        return request;
     }
     
     
