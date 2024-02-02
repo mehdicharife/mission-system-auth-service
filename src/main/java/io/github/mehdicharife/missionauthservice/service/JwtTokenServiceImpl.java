@@ -33,7 +33,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
                                @Value("${jwt.lifespan.seconds}") long jwtLifeSpan,
                                AccountService accountService) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.jwtLifeSpan = jwtLifeSpan;
+        this.jwtLifeSpan = jwtLifeSpan*1000;
         this.accountService = accountService;
     }
     
@@ -61,6 +61,18 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         } 
 
         return jwtTokenVerification;
+    }
+
+
+    public String extractUsername(String jwt) throws JwtException{
+        String username = Jwts
+                            .parser()
+                            .verifyWith(secretKey)
+                            .build()
+                            .parseSignedClaims(jwt)
+                            .getPayload()
+                            .getSubject();
+        return username;    
     }
 
 

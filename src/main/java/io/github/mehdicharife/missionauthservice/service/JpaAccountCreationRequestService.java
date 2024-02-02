@@ -3,6 +3,8 @@ package io.github.mehdicharife.missionauthservice.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import io.github.mehdicharife.missionauthservice.domain.Account;
@@ -14,14 +16,16 @@ import io.github.mehdicharife.missionauthservice.repository.AccountRepository;
 @Service
 public class JpaAccountCreationRequestService  implements AccountCreationRequestService {
 
-    private AccountCreationRequestRepository accountCreationRequestRepository;
-    private AccountRepository accountRepository;
+    private final AccountCreationRequestRepository accountCreationRequestRepository;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public JpaAccountCreationRequestService(AccountCreationRequestRepository accountCreationRequestRepository,
                                             AccountRepository accountRepository) {
         this.accountCreationRequestRepository = accountCreationRequestRepository;
         this.accountRepository = accountRepository;
+        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     public AccountCreationRequest createAccountCreationRequest(AccountCreationRequest accountCreationRequest) throws UsernameAlreadyExistsException {
@@ -31,9 +35,9 @@ public class JpaAccountCreationRequestService  implements AccountCreationRequest
             throw new UsernameAlreadyExistsException(username);
         }
 
-        AccountCreationRequest request =  this.accountCreationRequestRepository.save(accountCreationRequest);
+        accountCreationRequest.setPassword(passwordEncoder.encode(accountCreationRequest.getPassword()));
+        return this.accountCreationRequestRepository.save(accountCreationRequest);
 
-        return request;
     }
     
     

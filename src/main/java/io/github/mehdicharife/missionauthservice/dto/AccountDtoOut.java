@@ -3,24 +3,22 @@ package io.github.mehdicharife.missionauthservice.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountCreationRequestDto {
-    
+public class AccountDtoOut {
+
+    private Long id;
+
     private String username;
-    
-    private String password;
 
     private List<String> rolesNames = new ArrayList<>();
 
 
-    public AccountCreationRequestDto() {
-
+    public Long getId() {
+        return this.id;
     }
 
-    public AccountCreationRequestDto(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public void setId(Long id) {
+        this.id = id;
     }
-
 
     public String getUsername() {
         return this.username;
@@ -28,14 +26,6 @@ public class AccountCreationRequestDto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public List<String> getRolesNames() {
@@ -46,4 +36,5 @@ public class AccountCreationRequestDto {
         this.rolesNames = rolesNames;
     }
 
+    
 }

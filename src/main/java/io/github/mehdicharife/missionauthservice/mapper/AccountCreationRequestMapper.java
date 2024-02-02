@@ -6,7 +6,8 @@ import java.util.Optional;
 
 import io.github.mehdicharife.missionauthservice.domain.AccountCreationRequest;
 import io.github.mehdicharife.missionauthservice.domain.Role;
-import io.github.mehdicharife.missionauthservice.dto.AccountCreationRequestDto;
+import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestRequest;
+import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestResponse;
 import io.github.mehdicharife.missionauthservice.repository.RoleRepository;
 
 public class AccountCreationRequestMapper {
@@ -19,15 +20,15 @@ public class AccountCreationRequestMapper {
     }
 
 
-    public static AccountCreationRequest fromDto(AccountCreationRequestDto accountCreationRequestDto) {
+    public static AccountCreationRequest fromDto(CreateAccountCreationRequestRequest createAccountCreationRequestRequest) {
         AccountCreationRequest accountCreationRequest = new AccountCreationRequest();
 
-        accountCreationRequest.setUsername(accountCreationRequestDto.getUsername());
+        accountCreationRequest.setUsername(createAccountCreationRequestRequest.getUsername());
 
-        accountCreationRequest.setPassword(accountCreationRequestDto.getPassword()); 
+        accountCreationRequest.setPassword(createAccountCreationRequestRequest.getPassword()); 
 
         List<Role> roles = new ArrayList<Role>();
-        for(String roleName : accountCreationRequestDto.getRolesNames()) {
+        for(String roleName : createAccountCreationRequestRequest.getRolesNames()) {
             Optional<Role> optionalRole = roleRepository.findByName(roleName);
             if(optionalRole.isPresent()) {
                 roles.add(optionalRole.get());
@@ -36,6 +37,20 @@ public class AccountCreationRequestMapper {
         accountCreationRequest.setRoles(roles);
 
         return accountCreationRequest;
+    }
+
+    public static CreateAccountCreationRequestResponse toDto(AccountCreationRequest accountCreationRequest) {
+        CreateAccountCreationRequestResponse response = new CreateAccountCreationRequestResponse();
+
+        response.setUsername(accountCreationRequest.getUsername());
+        
+        response.setId(accountCreationRequest.getId());
+        
+        for(Role role: accountCreationRequest.getRoles()) {
+            response.getRolesNames().add(role.getName());
+        }
+        
+        return response;
     }
     
 }

@@ -3,11 +3,13 @@ package io.github.mehdicharife.missionauthservice.domain;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,7 +17,9 @@ import jakarta.persistence.Table;
 public class Account {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="accountIdGenerator")
+    @SequenceGenerator(name="accountIdGenerator", sequenceName = "accounts_id_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
     @OneToOne

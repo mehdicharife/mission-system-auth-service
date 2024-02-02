@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.mehdicharife.missionauthservice.domain.AccountCreationRequest;
-import io.github.mehdicharife.missionauthservice.dto.AccountCreationRequestDto;
+import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestRequest;
+import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestResponse;
 import io.github.mehdicharife.missionauthservice.exception.UsernameAlreadyExistsException;
 import io.github.mehdicharife.missionauthservice.mapper.AccountCreationRequestMapper;
 import io.github.mehdicharife.missionauthservice.service.AccountCreationRequestService;
@@ -25,11 +26,15 @@ public class AccountCreationRequestController {
 
 
     @PostMapping
-    public ResponseEntity<Object> submitAccountCreationRequest(@RequestBody AccountCreationRequestDto accountCreationRequestDto) {
+    public ResponseEntity<Object> submitAccountCreationRequest(@RequestBody CreateAccountCreationRequestRequest accountCreationRequestDto) {
         AccountCreationRequest accountCreationRequest = AccountCreationRequestMapper.fromDto(accountCreationRequestDto);
         try {
-            var bmw = this.accountCreationRequestService.createAccountCreationRequest(accountCreationRequest);
-            return new ResponseEntity<>(bmw, HttpStatus.CREATED);
+            AccountCreationRequest acr = this.accountCreationRequestService.createAccountCreationRequest(accountCreationRequest);
+
+            CreateAccountCreationRequestResponse response = AccountCreationRequestMapper.toDto(acr);
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            
         } catch(UsernameAlreadyExistsException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
