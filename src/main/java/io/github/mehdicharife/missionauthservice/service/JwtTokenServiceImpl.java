@@ -14,9 +14,11 @@ import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
 
 import io.github.mehdicharife.missionauthservice.domain.Account;
+import io.github.mehdicharife.missionauthservice.domain.JwtRevocation;
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.domain.JwtTokenVerification;
 import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
+import io.github.mehdicharife.missionauthservice.repository.JwtRevocationRepository;
 
 
 @Service
@@ -28,13 +30,17 @@ public class JwtTokenServiceImpl implements JwtTokenService{
 
     private final AccountService accountService;
 
+    private final JwtRevocationRepository jwtRevocationRepository;
+
 
     public JwtTokenServiceImpl(@Value("${jwt.secret}") String secret,
                                @Value("${jwt.lifespan.seconds}") long jwtLifeSpan,
-                               AccountService accountService) {
+                               AccountService accountService,
+                               JwtRevocationRepository jwtRevocationRepository) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtLifeSpan = jwtLifeSpan*1000;
         this.accountService = accountService;
+        this.jwtRevocationRepository = jwtRevocationRepository;
     }
     
 
@@ -44,9 +50,11 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         return new JwtToken(createJwtStringRepresentation(account));
     }
 
+
     
     public JwtTokenVerification verifyToken(JwtToken jwtToken) {
         JwtTokenVerification jwtTokenVerification = new JwtTokenVerification(jwtToken);
+        boolean jwtIsAuthentic;
 
         try {
             Jwts
@@ -55,12 +63,26 @@ public class JwtTokenServiceImpl implements JwtTokenService{
                 .build()
                 .parseSignedClaims(jwtToken.getContent());
 
-            jwtTokenVerification.setIsSuccessfull(true);
+            jwtIsAuthentic = true;
         } catch(JwtException exception) {
-            jwtTokenVerification.setIsSuccessfull(false);
+            jwtIsAuthentic = false;
         } 
 
+
+        jwtTokenVerification.setIsSuccessfull(jwtIsAuthentic && !jwtIsRevoked(jwtToken));
         return jwtTokenVerification;
+    }
+
+    //TODO: add exceptions for when the jwt is bad (e.g. bad signature, expired)
+    public JwtRevocation revokeJwt(JwtToken jwtToken) {
+        JwtRevocation jwtRevocation = new JwtRevocation(jwtToken.getContent());
+        this.jwtRevocationRepository.save(jwtRevocation);
+        return jwtRevocation;
+    }
+
+    
+    public boolean jwtIsRevoked(JwtToken jwtToken) {
+        return this.jwtRevocationRepository.existsByJwt(jwtToken.getContent());
     }
 
 
@@ -74,6 +96,8 @@ public class JwtTokenServiceImpl implements JwtTokenService{
                             .getSubject();
         return username;    
     }
+
+
 
 
     private String createJwtStringRepresentation(Account account) {

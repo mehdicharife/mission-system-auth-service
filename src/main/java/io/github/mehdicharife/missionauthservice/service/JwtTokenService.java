@@ -1,5 +1,6 @@
 package io.github.mehdicharife.missionauthservice.service;
 
+import io.github.mehdicharife.missionauthservice.domain.JwtRevocation;
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.domain.JwtTokenVerification;
 import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
@@ -10,6 +11,8 @@ public interface JwtTokenService  {
     JwtToken createJwtToken(String username, String password) throws BadUsernameOrPasswordException;
     
     JwtTokenVerification verifyToken(JwtToken jwtToken);
+
+    JwtRevocation revokeJwt(JwtToken jwtToken);
 
     String extractUsername(String jwt) throws JwtException;
 

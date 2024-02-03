@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.mehdicharife.missionauthservice.domain.JwtRevocation;
 import io.github.mehdicharife.missionauthservice.domain.JwtToken;
 import io.github.mehdicharife.missionauthservice.dto.CreateJwtTokenRequest;
 import io.github.mehdicharife.missionauthservice.exception.BadUsernameOrPasswordException;
@@ -38,5 +39,7 @@ public class JwtTokenController {
         } 
 
     }
+
+
     
 }

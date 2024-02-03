@@ -4,7 +4,6 @@ package io.github.mehdicharife.missionauthservice.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,7 +24,7 @@ public class SecurityConfig {
         return httpSecurity
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(
-                authz -> authz.requestMatchers("/jwt-tokens", "/jwt-verifications", "/account-creation-requests").permitAll()
+                authz -> authz.requestMatchers("/jwt-tokens", "/jwt-verifications", "/account-creation-requests", "/jwt-revocations").permitAll()
                               .requestMatchers("/accounts", "/roles").hasRole("ADMIN"))
 
             .csrf(AbstractHttpConfigurer::disable)
