@@ -23,6 +23,13 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private List<AccountDetails> accountsDetails;
 
+    public Role() {
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
 
     public Long getId() {
         return this.id;

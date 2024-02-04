@@ -17,14 +17,6 @@ public class CreateAccountCreationRequestResponse {
         this.id = id;
     }
 
-    public AccountDtoOut getAccountDetails() {
-        return this.accountDetails;
-    }
-
-    public void setAccountDetails(AccountDtoOut accountDetails) {
-        this.accountDetails = accountDetails;
-    }
-    
 
     public String getUsername() {
         return this.accountDetails.getUsername();

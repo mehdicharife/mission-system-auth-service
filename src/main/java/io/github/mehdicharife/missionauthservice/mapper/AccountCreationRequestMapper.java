@@ -2,22 +2,13 @@ package io.github.mehdicharife.missionauthservice.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import io.github.mehdicharife.missionauthservice.domain.AccountCreationRequest;
 import io.github.mehdicharife.missionauthservice.domain.Role;
 import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestRequest;
 import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestResponse;
-import io.github.mehdicharife.missionauthservice.repository.RoleRepository;
 
 public class AccountCreationRequestMapper {
-
-    private static RoleRepository roleRepository;
-
-
-    public AccountCreationRequestMapper(RoleRepository repository) {
-        roleRepository = repository;
-    }
 
 
     public static AccountCreationRequest fromDto(CreateAccountCreationRequestRequest createAccountCreationRequestRequest) {
@@ -29,10 +20,7 @@ public class AccountCreationRequestMapper {
 
         List<Role> roles = new ArrayList<Role>();
         for(String roleName : createAccountCreationRequestRequest.getRolesNames()) {
-            Optional<Role> optionalRole = roleRepository.findByName(roleName);
-            if(optionalRole.isPresent()) {
-                roles.add(optionalRole.get());
-            }
+            roles.add(new Role(roleName));
         }
         accountCreationRequest.setRoles(roles);
 

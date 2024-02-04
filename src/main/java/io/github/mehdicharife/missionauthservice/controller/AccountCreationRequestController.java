@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.mehdicharife.missionauthservice.domain.AccountCreationRequest;
 import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestRequest;
 import io.github.mehdicharife.missionauthservice.dto.CreateAccountCreationRequestResponse;
+import io.github.mehdicharife.missionauthservice.exception.RoleNotSupportedException;
 import io.github.mehdicharife.missionauthservice.exception.UsernameAlreadyExistsException;
 import io.github.mehdicharife.missionauthservice.mapper.AccountCreationRequestMapper;
 import io.github.mehdicharife.missionauthservice.service.AccountCreationRequestService;
@@ -36,6 +37,9 @@ public class AccountCreationRequestController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
             
         } catch(UsernameAlreadyExistsException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+            
+        } catch(RoleNotSupportedException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
