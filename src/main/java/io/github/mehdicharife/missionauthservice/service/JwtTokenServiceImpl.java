@@ -47,7 +47,10 @@ public class JwtTokenServiceImpl implements JwtTokenService{
     public JwtToken createJwtToken(String username, String password) throws BadUsernameOrPasswordException{
         Account account = this.accountService.findAccountByUsernameAndUnEncodedPassword(username, password);
 
-        return new JwtToken(createJwtStringRepresentation(account));
+        JwtToken jwt =  new JwtToken(createJwtStringRepresentation(account));
+        jwt.setAccountId(account.getId());
+        
+        return jwt;
     }
 
 
