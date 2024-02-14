@@ -53,36 +53,51 @@ public class Account {
 
 
     public String getUsername() {
+        initializeAccountDetailsIfNull();
         return this.accountDetails.getUsername();
     }
 
     public void setUsername(String username) {
+        initializeAccountDetailsIfNull();
         this.accountDetails.setUsername(username);
     }
 
     public String getPassword() {
+        initializeAccountDetailsIfNull();
         return this.accountDetails.getPassword();
     }
 
     public void setPassword(String password) {
+        initializeAccountDetailsIfNull();
         this.accountDetails.setPassword(password);
     }
 
     public Long getUserId() {
+        initializeAccountDetailsIfNull();
         return this.accountDetails.getUserId();
     }
 
     public void setUserId(Long userId) {
+        initializeAccountDetailsIfNull();
         this.accountDetails.setUserId(userId);
     }
 
 
     public List<Role> getRoles() {
+        initializeAccountDetailsIfNull();
         return this.accountDetails.getRoles();
     }
 
     public void setRoles(List<Role> roles) {
-        this.accountDetails.getRoles();
+        initializeAccountDetailsIfNull();
+        this.accountDetails.setRoles(roles);
+    }
+
+
+    private void initializeAccountDetailsIfNull() {
+        if(this.accountDetails == null) {
+            this.accountDetails = new AccountDetails();
+        }
     }
 
 }

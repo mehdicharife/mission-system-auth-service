@@ -1,7 +1,8 @@
-package io.github.mehdicharife.missionauthservice.config.security.filters;
+package io.github.mehdicharife.missionauthservice.config.security.filter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
+import io.github.mehdicharife.missionauthservice.config.security.mapper.RolesAuthoritiesMapper;
 import io.github.mehdicharife.missionauthservice.domain.Account;
 import io.github.mehdicharife.missionauthservice.domain.Jwt;
 import io.github.mehdicharife.missionauthservice.domain.JwtVerification;
@@ -49,29 +51,16 @@ public class JwtCookieFilter extends OncePerRequestFilter{
         }
 
         Jwt jwt = new Jwt(jwtCookie.getValue());
-        JwtVerification jwtVerification = this.jwtService.verifyToken(jwt);
-
-        if(!jwtVerification.isSuccessfull()) {
+        Optional<Account> optionalAccount = this.jwtService.extractAccountFromJwt(jwt);
+        if(optionalAccount.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        List<GrantedAuthority> authorities = this.jwtService
-            .getRolesFromJwt(jwt)
-            .stream()
-            .map(role -> 
-                new GrantedAuthority() {
-                    public String getAuthority() {
-                        return "ROLE_" + role.getName();
-                    }
-                }
-            )
-            .collect(Collectors.toList());
-
         
-        Account principal = new Account();
-        principal.setId(jwtService.extractId(jwt.getContent()));
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(principal, null, authorities);
+        Account account = optionalAccount.get();
+        List<GrantedAuthority> authorities = RolesAuthoritiesMapper.toAuthorities(account.getRoles());
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(account, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);

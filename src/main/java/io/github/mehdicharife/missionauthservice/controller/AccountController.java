@@ -42,7 +42,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("#id == principal.id or hasRole('ADMIN')")
+    @PreAuthorize("#id == principal.id")
     public ResponseEntity<Object> getAccount(@PathVariable("id") Long id) {
         Optional<Account> optionalAccount = this.accountService.getAccountById(id);
         if(optionalAccount.isPresent()) {

@@ -4,20 +4,20 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.jackson.io.JacksonDeserializer;
+//import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
@@ -46,10 +46,11 @@ public class JwtServiceImpl implements JwtService{
 
 
     public JwtServiceImpl(@Value("${jwt.secret}") String secret,
-                               @Value("${jwt.lifespan.seconds}") long jwtLifeSpan,
-                               AccountService accountService,
-                               JwtRevocationRepository jwtRevocationRepository,
-                               ObjectMapper objectMapper) {
+                          @Value("${jwt.lifespan.seconds}") long jwtLifeSpan,
+                          AccountService accountService,
+                          JwtRevocationRepository jwtRevocationRepository,
+                          ObjectMapper objectMapper) {
+
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtLifeSpan = jwtLifeSpan*1000;
         this.accountService = accountService;
@@ -66,11 +67,10 @@ public class JwtServiceImpl implements JwtService{
         
         return jwt;
     }
-
-
     
-    public JwtVerification verifyToken(Jwt jwtToken) {
-        JwtVerification jwtTokenVerification = new JwtVerification(jwtToken);
+    
+    public JwtVerification verifyToken(Jwt jwt) {
+        JwtVerification jwtVerification = new JwtVerification(jwt);
         boolean jwtIsAuthentic;
 
         try {
@@ -78,67 +78,94 @@ public class JwtServiceImpl implements JwtService{
                 .parser()
                 .verifyWith(secretKey)
                 .build()
-                .parseSignedClaims(jwtToken.getContent());
+                .parseSignedClaims(jwt.getContent());
 
             jwtIsAuthentic = true;
         } catch(JwtException exception) {
             jwtIsAuthentic = false;
         } 
 
-        jwtTokenVerification.setIsSuccessfull(jwtIsAuthentic && !jwtIsRevoked(jwtToken));
-        return jwtTokenVerification;
+        jwtVerification.setIsSuccessfull(jwtIsAuthentic && !jwtIsRevoked(jwt));
+        return jwtVerification;
     }
 
-    //TODO: add exceptions for when the jwt is bad (e.g. bad signature, expired)
-    public JwtRevocation revokeJwt(Jwt jwtToken) {
-        JwtRevocation jwtRevocation = new JwtRevocation(jwtToken.getContent());
+
+    public JwtRevocation revokeJwt(Jwt jwt) {
+        JwtRevocation jwtRevocation = new JwtRevocation(jwt.getContent());
         this.jwtRevocationRepository.save(jwtRevocation);
         return jwtRevocation;
     }
 
     
-    public boolean jwtIsRevoked(Jwt jwtToken) {
-        return this.jwtRevocationRepository.existsByJwt(jwtToken.getContent());
+    public boolean jwtIsRevoked(Jwt jwt) {
+        return this.jwtRevocationRepository.existsByJwt(jwt.getContent());
     }
 
 
-    @SuppressWarnings("unchecked")
-    public List<Role> getRolesFromJwt(Jwt jwt) throws JwtException{
-        
-        var claimsMap =  Jwts.parser()
-                   .json(new JacksonDeserializer<>(objectMapper))
-                   .verifyWith(secretKey)
-                   .build()
-                   .parseSignedClaims(jwt.getContent())
-                   .getPayload();
+    public Optional<Account> extractAccountFromJwt(Jwt jwt) {
+        Optional<Claims> optionalClaims = getPayload(jwt.getContent());
+        if(optionalClaims.isEmpty()) {
+            return Optional.empty();
+        }
 
+        Claims claims = optionalClaims.get();
+        Account account = new Account();
 
-        var rolesEntry = claimsMap.get("roles", ArrayList.class);
-        return objectMapper.convertValue(rolesEntry, new TypeReference<ArrayList<Role>>(){});
+        account.setId(claims.get("id", Long.class));
+
+        var rolesEntry = claims.get("roles", ArrayList.class);
+        List<Role> roles = objectMapper.convertValue(rolesEntry, new TypeReference<ArrayList<Role>>(){});
+        account.setRoles(roles);
+
+        return Optional.of(account);
     }
 
-    public String extractUsername(String jwt) throws JwtException{
-        String username = Jwts
-                            .parser()
-                            .verifyWith(secretKey)
-                            .build()
-                            .parseSignedClaims(jwt)
-                            .getPayload()
-                            .getSubject();
-        return username;    
+
+    public Optional<List<Role>> extractRolesFromJwt(Jwt jwt) throws JwtException{
+        Optional<Claims> optionalClaims = getPayload(jwt.getContent());
+        if(optionalClaims.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Claims claims = optionalClaims.get();
+        var rolesEntry = claims.get("roles", ArrayList.class);
+        return Optional.of(objectMapper.convertValue(rolesEntry, new TypeReference<ArrayList<Role>>(){}));
     }
+
+
+    public Optional<String> extractUsername(String jwt) {
+        Optional<Claims> optionalClaims = getPayload(jwt);
+        if(optionalClaims.isPresent()) {
+            return Optional.of(optionalClaims.get().getSubject());
+        }
+        return Optional.empty();
+    }
+
 
     public Long extractId(String jwt) throws JwtException {
-        return Jwts.parser()
-            .json(new JacksonDeserializer<>(objectMapper))
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(jwt)
-            .getPayload()
-            .get("id", Long.class);
+        Optional<Claims> optionalClaims = getPayload(jwt); 
+        if(optionalClaims.isEmpty()) {
+            return null;
+        }
+
+        return optionalClaims.get().get("id", Long.class);    
     }
 
 
+    public Optional<Claims> getPayload(String jwt) {
+        try {
+            Claims claims =  Jwts
+                    .parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(jwt)
+                    .getPayload();
+
+            return Optional.of(claims);
+        } catch(JwtException exception) {
+            return Optional.empty();
+        }
+    }
 
 
     private String createJwtStringRepresentation(Account account) {

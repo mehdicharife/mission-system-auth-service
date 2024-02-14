@@ -12,8 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import io.github.mehdicharife.missionauthservice.config.security.filters.JwtBearerFilter;
-import io.github.mehdicharife.missionauthservice.config.security.filters.JwtCookieFilter;
+import io.github.mehdicharife.missionauthservice.config.security.filter.JwtBearerFilter;
+import io.github.mehdicharife.missionauthservice.config.security.filter.JwtCookieFilter;
 
 @Configuration
 @EnableWebSecurity

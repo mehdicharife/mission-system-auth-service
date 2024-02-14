@@ -3,7 +3,9 @@ package io.github.mehdicharife.missionauthservice.service;
 import io.github.mehdicharife.missionauthservice.domain.JwtRevocation;
 
 import java.util.List;
+import java.util.Optional;
 
+import io.github.mehdicharife.missionauthservice.domain.Account;
 import io.github.mehdicharife.missionauthservice.domain.Jwt;
 import io.github.mehdicharife.missionauthservice.domain.JwtVerification;
 import io.github.mehdicharife.missionauthservice.domain.Role;
@@ -18,10 +20,12 @@ public interface JwtService  {
 
     JwtRevocation revokeJwt(Jwt jwtToken);
 
-    String extractUsername(String jwt) throws JwtException;
+    Optional<Account> extractAccountFromJwt(Jwt jwt);
 
-    public List<Role> getRolesFromJwt(Jwt jwt) throws JwtException;
+    Optional<String> extractUsername(String jwt) throws JwtException;
 
-    public Long extractId(String jwt) throws JwtException;
+    Optional<List<Role>> extractRolesFromJwt(Jwt jwt) throws JwtException;
+
+    Long extractId(String jwt) throws JwtException;
 
 }
