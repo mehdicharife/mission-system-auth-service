@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.github.mehdicharife.missionauthservice.service.JwtTokenService;
+import io.github.mehdicharife.missionauthservice.service.JwtService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,13 +18,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Component
-public class JwtFilter extends OncePerRequestFilter  {
+public class JwtBearerFilter extends OncePerRequestFilter  {
 
-    private JwtTokenService jwtService;
+    private JwtService jwtService;
 
     private UserDetailsService userDetailsService;
 
-    public JwtFilter(JwtTokenService jwtService, UserDetailsService userDetailsService) {
+    public JwtBearerFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -38,6 +38,12 @@ public class JwtFilter extends OncePerRequestFilter  {
             return;
         }
 
+        /*
+        TODOs: 
+            - Use the jwtService to extract the authorities from the token instead of getting the 
+              user from the database and then getting the authorities;
+            - 
+        */
         try {
             String username = this.jwtService.extractUsername(authorizationHeader.substring("Bearer".length()));
             UserDetails user = this.userDetailsService.loadUserByUsername(username);

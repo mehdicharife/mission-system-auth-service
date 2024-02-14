@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.mehdicharife.missionauthservice.domain.JwtToken;
-import io.github.mehdicharife.missionauthservice.domain.JwtTokenVerification;
-import io.github.mehdicharife.missionauthservice.service.JwtTokenService;
+import io.github.mehdicharife.missionauthservice.domain.Jwt;
+import io.github.mehdicharife.missionauthservice.domain.JwtVerification;
+import io.github.mehdicharife.missionauthservice.service.JwtService;
 
 
 @RestController
 @RequestMapping("/jwt-verifications")
 public class JwtTokenValidationController {
 
-    private JwtTokenService jwtTokenService;
+    private JwtService jwtTokenService;
 
-    public JwtTokenValidationController(JwtTokenService jwtTokenService) {
+    public JwtTokenValidationController(JwtService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
 
@@ -31,7 +31,7 @@ public class JwtTokenValidationController {
         }
 
         String rawJwt = preFixedJwt.substring(prefix.length());
-        JwtTokenVerification jwtTokenVerification = this.jwtTokenService.verifyToken(new JwtToken(rawJwt));
+        JwtVerification jwtTokenVerification = this.jwtTokenService.verifyToken(new Jwt(rawJwt));
 
         return new ResponseEntity<>(jwtTokenVerification, HttpStatus.CREATED);
     }

@@ -53,4 +53,8 @@ public class JpaAccountService implements AccountService {
         
         return this.accountRepository.save(account);
     }
+
+    public Optional<Account> getAccountById(Long id) {
+        return this.accountRepository.findById(id);
+    }
 }

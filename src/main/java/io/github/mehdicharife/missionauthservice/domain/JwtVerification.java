@@ -1,39 +1,37 @@
 package io.github.mehdicharife.missionauthservice.domain;
 
 
-public class JwtTokenVerification {
+public class JwtVerification {
     
-    private JwtToken jwtToken;
+    private Jwt jwtToken;
 
     private boolean isSuccessfull;
 
 
-    public JwtTokenVerification(JwtToken jwtToken, boolean isSuccessfull) {
+    public JwtVerification(Jwt jwtToken, boolean isSuccessfull) {
         this.jwtToken = jwtToken;
         this.isSuccessfull = isSuccessfull;
     }
 
-    public JwtTokenVerification(JwtToken jwtToken) {
+    public JwtVerification(Jwt jwtToken) {
         this.jwtToken = jwtToken;
     }
 
-    public JwtTokenVerification() {
+    public JwtVerification() {
     }
 
 
-    public JwtToken getJwtToken() {
+    public Jwt getJwtToken() {
         return this.jwtToken;
     }
 
-    public void setJwtToken(JwtToken jwtToken) {
+    public void setJwtToken(Jwt jwtToken) {
         this.jwtToken = jwtToken;
     }
 
-    public boolean isIsSuccessfull() {
-        return this.isSuccessfull;
-    }
 
-    public boolean getIsSuccessfull() {
+
+    public boolean isSuccessfull() {
         return this.isSuccessfull;
     }
 

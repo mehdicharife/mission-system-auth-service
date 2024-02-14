@@ -2,21 +2,21 @@ package io.github.mehdicharife.missionauthservice.domain;
 
 
 
-public class JwtToken {
+public class Jwt {
     
     private String content;
 
     private Long accountId;
 
-    public JwtToken() {
+    public Jwt() {
 
     }
 
-    public JwtToken(String content) {
+    public Jwt(String content) {
         this.content = content;
     }
 
-    public JwtToken(String content, Long accountId) {
+    public Jwt(String content, Long accountId) {
         this.content = content;
         this.accountId = accountId;
     }
