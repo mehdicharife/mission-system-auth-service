@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 
 import io.github.mehdicharife.missionauthservice.domain.JwtRevocation;
 import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 @Repository
 public class JedisJwtRevocationRepository implements JwtRevocationRepository {
@@ -15,8 +16,11 @@ public class JedisJwtRevocationRepository implements JwtRevocationRepository {
     
     public JedisJwtRevocationRepository(JedisPooled jedis) {
         this.jedis = jedis;
-        //jedis.bfInfo(JWT_REVOCATIONS_SET_KEY)
-        //jedis.bfReserve(JWT_REVOCATIONS_SET_KEY, 0.01, 1000);
+        try {
+            jedis.bfReserve(JWT_REVOCATIONS_SET_KEY, 0.01, 1000);
+        } catch(JedisDataException exception) {
+            System.out.println("The key is already reserved");
+        }
     }
 
 
