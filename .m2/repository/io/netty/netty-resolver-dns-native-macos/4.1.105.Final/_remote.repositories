@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Feb 15 17:31:40 UTC 2024
+netty-resolver-dns-native-macos-4.1.105.Final-osx-x86_64.jar>central=
+netty-resolver-dns-native-macos-4.1.105.Final-osx-aarch_64.jar>central=
+netty-resolver-dns-native-macos-4.1.105.Final.pom>central=

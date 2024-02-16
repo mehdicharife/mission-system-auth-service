@@ -3,4 +3,5 @@ VOLUME /tmp
 COPY . /app
 WORKDIR /app
 RUN mvn clean install -DskipTests
+
 ENTRYPOINT [ "mvn", "spring-boot:run" ]
