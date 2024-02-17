@@ -9,7 +9,7 @@ public class AccountDtoIn {
 
     private String password;
 
-    private List<String> rolesNames = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
 
 
     public String getUsername() {
@@ -20,12 +20,12 @@ public class AccountDtoIn {
         this.username = username;
     }
 
-    public List<String> getRolesNames() {
-        return this.rolesNames;
+    public List<String> getRoles() {
+        return this.roles;
     }
 
-    public void setRolesNames(List<String> rolesNames) {
-        this.rolesNames = rolesNames;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {

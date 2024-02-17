@@ -2,7 +2,7 @@ package io.github.mehdicharife.missionauthservice.dto;
 
 import java.util.List;
 
-// To futur self: The double Request at the end is intentional and not a typo
+// To future self: The double Request at the end is intentional and not a typo
 public class CreateAccountCreationRequestRequest {
     
     private transient AccountDtoIn accountDetails = new AccountDtoIn();
@@ -34,12 +34,12 @@ public class CreateAccountCreationRequestRequest {
     }
 
 
-    public List<String> getRolesNames() {
-        return this.accountDetails.getRolesNames();
+    public List<String> getRoles() {
+        return this.accountDetails.getRoles();
     }
 
-    public void setRolesNames(List<String> rolesNames) {
-        this.accountDetails.setRolesNames(rolesNames);
+    public void setRoles(List<String> rolesNames) {
+        this.accountDetails.setRoles(rolesNames);
     }
 
 }

@@ -35,8 +35,22 @@ public class JwtVerification {
         return this.isSuccessfull;
     }
 
+    public boolean getIsSuccessfull() {
+        return this.isSuccessfull;
+    }
+
     public void setIsSuccessfull(boolean isSuccessfull) {
         this.isSuccessfull = isSuccessfull;
     }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " jwtToken='" + getJwtToken() + "'" +
+            ", isSuccessfull='" + isSuccessfull() + "'" +
+            "}";
+    }
+
 
 }

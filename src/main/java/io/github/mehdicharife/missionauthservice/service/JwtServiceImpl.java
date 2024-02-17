@@ -113,9 +113,11 @@ public class JwtServiceImpl implements JwtService{
 
         account.setId(claims.get("id", Long.class));
 
+        account.setUsername(claims.getSubject());
+
         var rolesEntry = claims.get("roles", ArrayList.class);
         List<Role> roles = objectMapper.convertValue(rolesEntry, new TypeReference<ArrayList<Role>>(){});
-        account.setRoles(roles);
+        account.setRoles(roles); 
 
         return Optional.of(account);
     }

@@ -19,7 +19,7 @@ public class AccountCreationRequestMapper {
         accountCreationRequest.setPassword(createAccountCreationRequestRequest.getPassword()); 
 
         List<Role> roles = new ArrayList<Role>();
-        for(String roleName : createAccountCreationRequestRequest.getRolesNames()) {
+        for(String roleName : createAccountCreationRequestRequest.getRoles()) {
             roles.add(new Role(roleName));
         }
         accountCreationRequest.setRoles(roles);
@@ -35,7 +35,7 @@ public class AccountCreationRequestMapper {
         response.setId(accountCreationRequest.getId());
         
         for(Role role: accountCreationRequest.getRoles()) {
-            response.getRolesNames().add(role.getName());
+            response.getRoles().add(role.getName());
         }
         
         return response;

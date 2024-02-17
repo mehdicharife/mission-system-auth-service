@@ -14,7 +14,7 @@ public class AccountMapper {
         dto.setUsername(account.getUsername());
 
         for(Role role: account.getRoles()) {
-            dto.getRolesNames().add(role.getName());
+            dto.getRoles().add(role.getName());
         }
 
         return dto;

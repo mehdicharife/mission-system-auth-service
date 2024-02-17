@@ -26,12 +26,12 @@ public class CreateAccountCreationRequestResponse {
         this.accountDetails.setUsername(username);
     }
 
-    public List<String> getRolesNames() {
-        return this.accountDetails.getRolesNames();
+    public List<String> getRoles() {
+        return this.accountDetails.getRoles();
     }
 
-    public void setRolesNames(List<String> rolesNames) {
-        this.accountDetails.setRolesNames(rolesNames);
+    public void setRoles(List<String> rolesNames) {
+        this.accountDetails.setRoles(rolesNames);
     }
 
     
